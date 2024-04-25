@@ -2,7 +2,9 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+.idea
+identifier.sqlite
+favicon.ico
 # C extensions
 *.so
 
