@@ -7,9 +7,10 @@ I know this project probably has massive security-related (and not only security
 however, if you wish (for some reason) to point some of 
 them out to me, don't be shy and create an Issue. I might take a look at it at some point.
 ## How To Run
-No matter the system you use, you must have 'uvicorn' and python 3.10+ installed.
+No matter the system you use, you must have 'uvicorn' and python 3.10+ installed.<br>
+If something isn't installed, `pip install "fastapi[all]"` should do the trick.<br>
 (Next time I will try to understand how Docker works to make it easier for everybody,
-but for now this will have to do).
+but for now this will have to do).<br>
 Open terminal in the project's **root folder** and type:<br>
 `uvicorn main:app --reload`<br>
 This will start the server on `localhost:8000`.<br>
