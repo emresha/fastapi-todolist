@@ -1,0 +1,54 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-container label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-label {
+    background-color: transparent !important;
+    padding-bottom: 0px !important;
+}
+
+.login-container b, .login-container input {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    border-radius: 35px;
+    border: none;
+    margin: 10px;
+    padding: 10px;
+    color: #787878;
+    background-color: #171717;
+}
+
+.login-container button {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+}
+
+body {
+    box-sizing: border-box;
+    color: #f3f3f3;
+    font-family: "Ubuntu", sans-serif;
+    padding: 5px;
+    background-color: #171717;
+
+}
+
+form {
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    align-items: center;
+    background-color: #353535;
+    border: dimgrey solid 1px;
+    border-radius: 35px;
+}
