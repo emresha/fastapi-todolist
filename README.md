@@ -41,6 +41,6 @@ Now you have your first task, and you can mark it as complete using the "Mark As
 ## _Maybe_ I will do this later
 - Make the application safer to use;
 - Add the ability to edit the ToDos;
-- Add profile page;
+- Add a profile page;
 - Show completed ToDos at the end;
 - Code style changes.
