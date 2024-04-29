@@ -1,4 +1,3 @@
-# get put post delete todolist
 import json
 from secrets import token_hex
 from datetime import datetime, timedelta
@@ -10,7 +9,6 @@ from fastapi.requests import Request
 import sqlite3
 
 from starlette.staticfiles import StaticFiles
-from pathlib import Path
 
 app = FastAPI(static_dir="static", )
 
@@ -23,62 +21,100 @@ app.mount(
 
 @app.get("/")
 async def root(request: Request):
+    # connecting to the db
+    db = sqlite3.connect("todo.db")
+    cursor = db.cursor()
     auth = request.cookies.get("auth")
+    # if authorized
     if auth is not None and auth != "":
-        try:
-            db = sqlite3.connect("todo.db")
-            cursor = db.cursor()
-            user_id = cursor.execute("SELECT id FROM Users WHERE session_token = ?", (auth,)).fetchone()[0]
-            tasks = cursor.execute("SELECT * FROM Tasks WHERE owner = ?", (user_id,)).fetchall()
-            cursor.close()
-            db.close()
-            tasks_dict = []
-
-            for i in tasks:
-                task_dict = {}
-                (task_dict["id"], task_dict["title"],
-                 task_dict["status"], task_dict["description"], task_dict["owner"], task_dict["creation_date"]) = i
-                tasks_dict.append(task_dict)
-            r = json.dumps(tasks_dict)
-            return FileResponse("static/home.html", media_type="text/html", headers={"tasks": f"{r}"})
-        except Exception as e:
-            return f"Unexpected error. {e}"
+        expire_date = cursor.execute("SELECT session_expire_date FROM Users WHERE session_token = ?",
+                                     (auth,)).fetchone()
+        if expire_date is not None:
+            # if session token hasn't expired yet
+            if datetime.now() < datetime.strptime(expire_date[0], "%Y-%m-%d %H:%M:%S.%f"):
+                try:
+                    user_id = cursor.execute("SELECT id FROM Users WHERE session_token = ?", (auth,)).fetchone()[0]
+                    tasks = cursor.execute("SELECT * FROM Tasks WHERE owner = ?", (user_id,)).fetchall()
+                    cursor.close()
+                    db.close()
+                    tasks_dict = []
+                    # get all tasks
+                    for i in tasks:
+                        task_dict = {}
+                        (task_dict["id"], task_dict["title"],
+                         task_dict["status"], task_dict["description"], task_dict["owner"],
+                         task_dict["creation_date"]) = i
+                        tasks_dict.append(task_dict)
+                    r = json.dumps(tasks_dict)
+                    return FileResponse("static/home.html", media_type="text/html", headers={"tasks": f"{r}"})
+                except Exception as e:
+                    cursor.close()
+                    db.close()
+                    return f"Unexpected error. {e}"
+            else:
+                cursor.close()
+                db.close()
+                return FileResponse("static/login.html", media_type="text/html")
     else:
+        cursor.close()
+        db.close()
         return FileResponse("static/login.html", media_type="text/html")
 
 
 @app.post("/")
 async def root(request: Request):
+    # connecting to the db
+    db = sqlite3.connect("todo.db")
+    cursor = db.cursor()
     auth = request.cookies.get("auth")
+    # if authorized
     if auth is not None and auth != "":
-        try:
-            db = sqlite3.connect("todo.db")
-            cursor = db.cursor()
-            user_id = cursor.execute("SELECT id FROM Users WHERE session_token = ?", (auth,)).fetchone()[0]
-            tasks = cursor.execute("SELECT * FROM Tasks WHERE owner = ?", (user_id,)).fetchall()
-            cursor.close()
-            db.close()
-            tasks_dict = []
-
-            if not tasks:
-                return "You have no tasks yet."
-
-            for i in tasks:
-                task_dict = {}
-                (task_dict["id"], task_dict["title"],
-                 task_dict["status"], task_dict["description"], task_dict["owner"], task_dict["creation_date"]) = i
-                tasks_dict.append(task_dict)
-            return tasks_dict
-        except Exception as e:
-            return f"Unexpected error. {e}"
+        expire_date = cursor.execute("SELECT session_expire_date FROM Users WHERE session_token = ?",
+                                     (auth,)).fetchone()
+        if expire_date is not None:
+            # if session token hasn't expired yet
+            if datetime.now() < datetime.strptime(expire_date[0], "%Y-%m-%d %H:%M:%S.%f"):
+                try:
+                    user_id = cursor.execute("SELECT id FROM Users WHERE session_token = ?", (auth,)).fetchone()[0]
+                    tasks = cursor.execute("SELECT * FROM Tasks WHERE owner = ?", (user_id,)).fetchall()
+                    cursor.close()
+                    db.close()
+                    tasks_dict = []
+                    # get all tasks
+                    for i in tasks:
+                        task_dict = {}
+                        (task_dict["id"], task_dict["title"],
+                         task_dict["status"], task_dict["description"], task_dict["owner"],
+                         task_dict["creation_date"]) = i
+                        tasks_dict.append(task_dict)
+                    r = json.dumps(tasks_dict)
+                    return FileResponse("static/home.html", media_type="text/html", headers={"tasks": f"{r}"})
+                except Exception as e:
+                    cursor.close()
+                    db.close()
+                    return f"Unexpected error. {e}"
+            else:
+                cursor.close()
+                db.close()
+                return FileResponse("static/login.html", media_type="text/html")
     else:
-        return RedirectResponse("/login")
+        cursor.close()
+        db.close()
+        return FileResponse("static/login.html", media_type="text/html")
 
 
 @app.post("/register")
 async def register(request: Request):
-    user_login = request.headers.get("login")
-    user_password = request.headers.get("password")
+    auth = request.cookies.get("auth")
+    if auth is not None and auth != "":
+        return Response("400 Bad Request", status_code=400)
+    b = await request.json()
+    try:
+        user_login = b["login"]
+        user_password = b["password"]
+    except Exception as e:
+        print(e)
+        return Response("400 Bad Request", status_code=400)
     db = sqlite3.connect("todo.db")
     cursor = db.cursor()
     try:
@@ -110,8 +146,6 @@ async def login(request: Request, response: Response):
             cursor.close()
             db.close()
             return "You are already signed in."
-        else:
-            return "Session expired"
 
     # get the user data from headers
     user_login = request.headers.get("login")
@@ -152,21 +186,16 @@ async def login(request: Request, response: Response):
             cursor.close()
             db.close()
             return "You are already signed in."
-        else:
-            cursor.close()
-            db.close()
-            return "Session expired"
 
     # get the user data from headers
     user_login = request.headers.get("login")
     user_password = request.headers.get("password")
 
     """
-        the code below is for authentication purposes
+    the code below is for authentication purposes
     """
     try:
-        cursor.execute("SELECT * FROM Users WHERE login = ?",
-                       (user_login,))  # this tries to find user with given login
+        cursor.execute("SELECT * FROM Users WHERE login = ?", (user_login,))  # this tries to find user with given login
         user = cursor.fetchone()
         if user is not None:  # if user was found, proceed further
             if user_password == user[2]:  # this line checks whether the given password checks out with the actual one
@@ -190,19 +219,30 @@ async def logout(request: Request, response: Response):
     db = sqlite3.connect("todo.db")
     cursor = db.cursor()
     current_session = request.cookies.get("auth")
+    expire_date = cursor.execute("SELECT session_expire_date FROM Users WHERE session_token = ?",
+                                 (current_session,)).fetchone()
+    if current_session is None or current_session == "":
+        return Response("400 Bad Request", status_code=400)
+    elif expire_date is not None and datetime.now() >= datetime.strptime(expire_date[0], "%Y-%m-%d %H:%M:%S.%f"):
+        return Response("403 Forbidden", status_code=403)
     try:
         user_id = cursor.execute("SELECT id "
-                                 "FROM Users WHERE session_token = ?", (current_session,)).fetchone()[0]
-        cursor.execute("UPDATE Users SET session_token = ?, session_expire_date = ? WHERE id = ?", ("", "", user_id))
-        response.set_cookie("auth", "")
+                                 "FROM Users WHERE session_token = ?", (current_session,)).fetchone()
+        print(user_id[0])
+        cursor.execute("UPDATE Users SET session_token = ?,"
+                       " session_expire_date = ? WHERE id = ?", ("", "", int(user_id[0])))
+        response.delete_cookie("auth")
         response.body = "Successfully logged out."
+        db.commit()
         cursor.close()
         db.close()
-        return response
+        print("LOGGED OUT")
+        return response.body
     except Exception as e:
+        print(f"EXCEPTION {e}")
         cursor.close()
         db.close()
-        return "Something went wrong."
+        return "Something went wrong. {e}".format(e=e)
 
 
 @app.get("/login")
@@ -213,3 +253,56 @@ async def login():
 @app.get("/logout")
 async def logout():
     return "Cannot send GET request to /logout. Please get the hell out."
+
+
+@app.put("/complete_task")
+async def complete_task(request: Request):
+    r = await request.json()
+    try:
+        task_id = r["id"]
+    except Exception as e:
+        return Response(content="400 Bad Request", status_code=400)
+    auth = request.cookies.get("auth")
+    if auth is not None and auth != "":
+        db = sqlite3.connect("todo.db")
+        cur = db.cursor()
+        expire_date = cur.execute("SELECT session_expire_date FROM Users WHERE session_token = ?", (auth,)).fetchone()
+        if expire_date is not None and datetime.now() < datetime.strptime(expire_date[0], "%Y-%m-%d %H:%M:%S.%f"):
+            user_id = cur.execute("SELECT id FROM Users WHERE session_token = ?", (auth,)).fetchone()[0]
+            task_owner = cur.execute("SELECT owner FROM Tasks WHERE id = ?", (task_id,)).fetchone()[0]
+            if user_id != task_owner:
+                return Response("403 Forbidden", status_code=403)
+            cur.execute("UPDATE Tasks SET status = 1 WHERE id = ?", (task_id,))
+            db.commit()
+            cur.close()
+            db.close()
+            return Response("200 Success", status_code=200)
+    return Response("403 Forbidden", status_code=403)
+
+
+@app.post("/create_task")
+async def create_task(request: Request):
+    auth = request.cookies.get("auth")
+    if auth is None or auth == "":
+        return Response("403 Forbidden", status_code=403)
+
+    db = sqlite3.connect("todo.db")
+    cursor = db.cursor()
+    expire_date = cursor.execute("SELECT session_expire_date FROM Users WHERE session_token = ?", (auth,)).fetchone()
+    if datetime.now() >= datetime.strptime(expire_date[0], "%Y-%m-%d %H:%M:%S.%f"):
+        return Response("403 Forbidden", status_code=403)
+
+    r = await request.json()
+    try:
+        title = r["title"]
+        description = r["description"]
+        owner = cursor.execute("SELECT id FROM Users WHERE session_token = ?", (auth,)).fetchone()[0]
+        cursor.execute("INSERT INTO Tasks (title, description, owner, creation_date) "
+                       "VALUES (?, ?, ?, ?)", (title, description, owner, datetime.now()))
+        db.commit()
+        cursor.close()
+        db.close()
+        return Response("200 Success", status_code=200)
+    except Exception as e:
+        return Response("400 Bad Request", status_code=400)
+

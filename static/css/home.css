@@ -1,0 +1,119 @@
+
+
+body {
+    box-sizing: border-box;
+    color: #f3f3f3;
+    font-family: "Ubuntu", sans-serif;
+    padding: 5px;
+    background-color: #171717;
+
+}
+
+#todoList {
+    align-items: center;
+    padding: 25px;
+    display: flex;
+    flex-flow: row wrap;
+    background-color: #353535;
+    border: dimgrey solid 1px;
+    border-radius: 35px;
+}
+
+.todo-item {
+    max-width: 500px;
+    padding: 25px;
+    background-color: #505050;
+    border-radius: 35px;
+    margin: 10px;
+}
+
+button {
+    transition: 0.3s ease;
+    padding: 5px 10px 5px 10px;
+    display: flex;
+    color: #f3f3f3;
+    align-items: center;
+    background-color: transparent;
+    cursor: pointer;
+    border: dimgrey solid 1px;
+    border-radius: 35px;
+}
+
+.Complete {
+    color: #779170;
+}
+
+.Incomplete {
+    color: #ffb0b0;
+}
+
+button img {
+    margin-right: 5px;
+}
+
+button:hover {
+    transform: translateY(3px);
+    background-color: #4f5e4c;
+}
+
+#create-task img {
+    margin: 0;
+}
+
+#log-out {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+}
+
+#create-task, #log-out {
+    padding: 0;
+    border: none !important;
+}
+
+#create-task:hover, #log-out:hover {
+    background: none;
+    transform: translateY(3px);
+}
+
+#create-task {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+#popupOverlay {
+    width: 40%;
+    padding: 25px;
+    display: flex;
+    color: #f3f3f3;
+    align-items: center;
+    flex-flow: column nowrap;
+    background-color: #353535;
+    border: dimgrey solid 1px;
+    border-radius: 35px;
+}
+
+#popupOverlay button {
+    width: 50%;
+    max-width: 100px;
+}
+
+#popupOverlay input, #popupOverlay textarea {
+    text-align: left;
+    min-width: 150px;
+    width: 65%;
+    display: flex;
+    justify-content: center;
+    border-radius: 35px;
+    border: none;
+    margin: 10px;
+    padding: 10px;
+    color: #787878;
+    background-color: #171717;
+}
+
+#popupOverlay textarea {
+    padding: 15px;
+    resize: vertical;
+}

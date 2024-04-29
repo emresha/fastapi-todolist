@@ -1,12 +1,12 @@
-// Function to generate HTML block for todo
+// function to generate HTML block for todo
 function generateTodoHTML(todo) {
     return `
-        <div class="todo-item">
+        <div class="todo-item" data-id="${todo.id}">
             <h2>${todo.title}</h2>
-            <p>Status: ${todo.status === 0 ? 'Incomplete' : 'Complete'}</p>
-            <p>Description: ${todo.description}</p>
-            <p>Owner: ${todo.owner}</p>
+            ${todo.status === 0 ? '<p class="Incomplete">Incomplete</p>' : '<p class="Complete">Complete</p>'}</p>
+            <p>${todo.description}</p>
             <p>Creation Date: ${todo.creation_date ? todo.creation_date : 'N/A'}</p>
+            ${todo.status === 0 ? '<button class="done-button" onclick=\"markAsDone(event)\"><img src=\"./static/img/done.svg\" height="32" alt=\"Mark As Done\"/>Mark As Done</button>' : ""}
         </div>
     `;
 }

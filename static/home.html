@@ -1,18 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo List App</title>
-<!--    <link rel="stylesheet" href="styles.css">-->
+    <link rel="stylesheet" href="./static/css/home.css" type="text/css">
+    <title>To Do App</title>
+    <script src="./static/scripts/button.js"></script>
+    <script src="./static/scripts/logout.js"></script>
 </head>
 <body>
     <header>
-        <h1>Todo List App</h1>
+        <h1 style="text-align: center">This is a TODO app.</h1>
     </header>
     <div id="todoList">
 
     </div>
+    <button id="create-task"><img height="75" src="./static/img/add.svg" alt="Create Task"></button>
+    <button id="log-out"><img height="50" src="./static/img/logout.png" alt="Log out" onclick="logOut(event)"></button>
     <script src="./static/scripts/home.js"></script>
+    <script src="./static/scripts/create_popup.js"></script>
 </body>
 </html>
