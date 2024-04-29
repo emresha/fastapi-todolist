@@ -28,7 +28,6 @@ function userRegister(event) {
         })
         .catch(error => {
             console.error("Error registering: ", error)
-            location.reload();
         })
 
 }
