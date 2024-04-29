@@ -23,7 +23,8 @@ function userRegister(event) {
             return response.json()
         })
         .then(data => {
-            console.log("Register successful!")
+            console.log("Register successful!");
+            location.reload();
         })
         .catch(error => {
             console.error("Error registering: ", error)
