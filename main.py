@@ -2,6 +2,7 @@ import json
 from secrets import token_hex
 from datetime import datetime, timedelta
 
+import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import Response, RedirectResponse, FileResponse
 from fastapi.requests import Request
@@ -309,3 +310,5 @@ async def create_task(request: Request):
     except Exception as e:
         return Response("400 Bad Request", status_code=400)
 
+if __name__ == "__main__":
+    uvicorn.run("main:app", host='127.0.0.1', port=8000, reload=True)

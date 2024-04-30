@@ -17,9 +17,7 @@ Open terminal in the project's **root folder** and type:<br>
 This will start the server on `localhost:8000`.<br>
 Now open up your favourite browser and go to the address mentioned above.<br>
 That's basically it. The frontend is pretty intuitive.<br>
-`python3 main.py` or `python main.py` will NOT work. Believe me, I tried.<br>
-I guess if you make some minor changes to the code it will, but I was satisfied with
-using uvicorn.
+By the way, `python3 main.py` or `python main.py` will work as well.<br>
 That's it. Thanks:)
 ## How It Works
 Basically, you have a backend.<br>
