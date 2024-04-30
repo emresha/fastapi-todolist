@@ -11,6 +11,7 @@ No matter the system you use, you must have 'uvicorn' and python 3.10+ installed
 If something isn't installed, `pip install "fastapi[all]"` should do the trick.<br>
 (Next time I will try to understand how Docker works to make it easier for everybody,
 but for now this will have to do).<br>
+Clone the repository wherever you want: `git clone https://github.com/emresha/fastapi-todolist.git`<br>
 Open terminal in the project's **root folder** and type:<br>
 `uvicorn main:app --reload`<br>
 This will start the server on `localhost:8000`.<br>
@@ -28,10 +29,11 @@ Then you log in or register (after registration you will be asked to log in) and
 again redirected back to "/", where you will have your tasks! Your session lasts exactly 3600 seconds === 1 hour. After that you will be asked to log in.<br> To add a task you simply click
 on a button on the right bottom corner (which is a plus sign) and write in a title and a description
 and then press "Add".<br>
-Now you have your first task, and you can mark it as complete using the "Mark As Complete" button.
+Now you have your first task, and you can mark it as complete using the "Mark As Done" button.
+Complete tasks can be once again marked as incomplete using the "Mark As Undone" button.
 <br>You can log out using the button in the bottom left corner.<br>
 <br>That's basically it.
-## What was used
+## What Was Used
 - `Python 3.10`;
 - `SQLite`;
 - `SQL` requests;
@@ -44,4 +46,5 @@ Now you have your first task, and you can mark it as complete using the "Mark As
 - Add the ability to edit the ToDos;
 - Add a profile page;
 - Show completed ToDos at the end;
-- Code style changes.
+- Code style changes;
+- Use Jinja HTML templates.
