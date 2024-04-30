@@ -255,11 +255,14 @@ async def logout():
     return "Cannot send GET request to /logout. Please get the hell out."
 
 
-@app.put("/complete_task")
+@app.put("/change_task")
 async def complete_task(request: Request):
     r = await request.json()
     try:
         task_id = r["id"]
+        new_status = r["new_status"]
+        if int(new_status) != 0 and int(new_status) != 1:
+            return Response("400 Bad Request", status_code=400)
     except Exception as e:
         return Response(content="400 Bad Request", status_code=400)
     auth = request.cookies.get("auth")
@@ -272,7 +275,7 @@ async def complete_task(request: Request):
             task_owner = cur.execute("SELECT owner FROM Tasks WHERE id = ?", (task_id,)).fetchone()[0]
             if user_id != task_owner:
                 return Response("403 Forbidden", status_code=403)
-            cur.execute("UPDATE Tasks SET status = 1 WHERE id = ?", (task_id,))
+            cur.execute("UPDATE Tasks SET status = ? WHERE id = ?", (new_status, task_id,))
             db.commit()
             cur.close()
             db.close()

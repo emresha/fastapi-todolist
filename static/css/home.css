@@ -25,6 +25,13 @@ body {
     background-color: #505050;
     border-radius: 35px;
     margin: 10px;
+    transition: 0.2s ease;
+    box-shadow: 0px 0px 25px 0px rgba(0,0,0,0.3);
+}
+
+.todo-item:hover {
+    transform: translateY(2px);
+    box-shadow: 0px 0px 25px 0px rgba(0,0,0,0.55);
 }
 
 button {
@@ -61,7 +68,7 @@ button:hover {
 }
 
 #log-out {
-    position: absolute;
+    position: fixed;
     left: 20px;
     bottom: 20px;
 }
@@ -77,12 +84,13 @@ button:hover {
 }
 
 #create-task {
-    position: absolute;
+    position: fixed;
     bottom: 20px;
     right: 20px;
 }
 
 #popupOverlay {
+    box-shadow: 0px 0px 25px 0px rgba(0,0,0,0.6);
     width: 40%;
     padding: 25px;
     display: flex;

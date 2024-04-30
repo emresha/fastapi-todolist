@@ -8,7 +8,6 @@ document.getElementById("create-task").addEventListener("click", function() {
     overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
     overlay.style.zIndex = "9999";
     document.body.appendChild(overlay);
-
     var popup = document.createElement("div");
     popup.id = "popupOverlay";
     popup.style.position = "fixed";
@@ -17,6 +16,10 @@ document.getElementById("create-task").addEventListener("click", function() {
     popup.style.transform = "translate(-50%, -50%)";
     popup.style.zIndex = "10000";
     document.body.appendChild(popup);
+
+    var headerTask = document.createElement("h2");
+    headerTask.textContent = "New Task";
+    popup.appendChild(headerTask);
 
     var titleInput = document.createElement("input");
     titleInput.type = "text";

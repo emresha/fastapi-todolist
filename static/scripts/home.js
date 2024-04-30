@@ -6,7 +6,8 @@ function generateTodoHTML(todo) {
             ${todo.status === 0 ? '<p class="Incomplete">Incomplete</p>' : '<p class="Complete">Complete</p>'}</p>
             <p>${todo.description}</p>
             <p>Creation Date: ${todo.creation_date ? todo.creation_date : 'N/A'}</p>
-            ${todo.status === 0 ? '<button class="done-button" onclick=\"markAsDone(event)\"><img src=\"./static/img/done.svg\" height="32" alt=\"Mark As Done\"/>Mark As Done</button>' : ""}
+            ${todo.status === 0 ? '<button class="done-button" onclick=\"changeTask(event, 1)\"><img src=\"./static/img/done.svg\" height="32" alt=\"Mark As Done\"/>Mark As Done</button>' : ""}
+            ${todo.status === 1 ? '<button class="undone-button" onclick=\"changeTask(event, 0)\"><img src=\"./static/img/cross.png\" height="32" alt=\"Mark As Undone\"/>Mark As Undone</button>' : ""}
         </div>
     `;
 }
@@ -34,5 +35,4 @@ async function fetchTasksAndRender() {
     }
 }
 
-// Call fetchTasksAndRender to fetch tasks and render them
 fetchTasksAndRender();

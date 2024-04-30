@@ -1,4 +1,4 @@
-function markAsDone(event) {
+function changeTask(event, status) {
     event.preventDefault();
 
     var todoItem = event.target.closest(".todo-item");
@@ -6,11 +6,12 @@ function markAsDone(event) {
     var taskId = todoItem.dataset.id;
 
     var data = {
-        id: taskId
+        id: taskId,
+        new_status: status
     };
 
     // send a PUT request to the endpoint with the JSON data
-    fetch('/complete_task', {
+    fetch('/change_task', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
