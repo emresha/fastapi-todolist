@@ -19,6 +19,52 @@ app.mount(
     name="static",
 )
 
+"""
+backend -> json -> frontend
+
+3 layers: controller, service, repository (folders) (look up mvc)
+
+auth function
+
+on first line: with db connection...
+------------------------
+.../tasks
+
+GET -- все
+
+/tasks/{id}
+
+PUT
+{
+  "action": "CLOSE" | "OPEN"
+}
+
+/tasks
+POST
+{
+  "title": "...",
+  "description": "...",
+}
+
+/tasks/{id}
+DELETE
+no-content
+------------------------
+try page-request
+
+try jwt
+
+lookup multiple connections to db (connection pool)
+
+from pydantic import BaseModel 
+
+(data classes possibly) other library
+----------------------- js frameworks
+react.js / vue.js / typescript
+----------------------- web-server
+nginx if frontend reworked
+-----------------------
+"""
 
 @app.get("/")
 async def root(request: Request):
@@ -110,6 +156,7 @@ async def register(request: Request):
     if auth is not None and auth != "":
         return Response("400 Bad Request", status_code=400)
     b = await request.json()
+    # pydantic
     try:
         user_login = b["login"]
         user_password = b["password"]
